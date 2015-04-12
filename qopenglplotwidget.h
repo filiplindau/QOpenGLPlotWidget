@@ -6,6 +6,8 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QMatrix4x4>
+#include <QVector3D>
+#include <QColor>
 
 class QOpenGLPlotWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -14,8 +16,8 @@ public:
     explicit QOpenGLPlotWidget(QWidget* parent = 0);
     ~QOpenGLPlotWidget();
 
-    void setAxisColor(glColor3f bkgColor);
-    glColor3f getAxisColor();
+    void setAxisColor(QColor bkgColor);
+    QColor getAxisColor();
 
 private:
     void initializeGL();
@@ -33,9 +35,9 @@ private:
 
     void drawAxes();
 
-    glColor3f backgroundColor;
-    glColor3f axisColor;
-    glColor3f curveColor;
+    QColor backgroundColor;
+    QColor axisColor;
+    QColor curveColor;
 
 signals:
 

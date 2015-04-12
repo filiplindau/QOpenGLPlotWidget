@@ -4,6 +4,11 @@ static inline double GET_ABS(double x) {return x>0?x:-x;}
 
 QOpenGLPlotWidget::QOpenGLPlotWidget(QWidget* parent)
 {
+    QColor bkgColor(0,0,0);
+    this->backgroundColor = bkgColor;
+    QColor axisColor(0.8,0.8,1);
+    this->axisColor = axisColor;
+
 
 }
 
@@ -34,6 +39,7 @@ void QOpenGLPlotWidget::paintGL()
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
     this->drawPolyLine();
+    this->drawAxes();
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
 
@@ -52,7 +58,7 @@ void QOpenGLPlotWidget::drawPolyLine()
 
     glEnd();
 
-    this->drawLine(0,0,300,100,7,1.0,1.0,0.4,0,0,0,false);
+    this->drawLine(0,0,90,90,7,1.0,1.0,0.4,0,0,0,false);
 }
 
 void QOpenGLPlotWidget::drawLine( double x1, double y1, double x2, double y2, //coordinates of the line
@@ -258,15 +264,68 @@ void QOpenGLPlotWidget::drawLine( double x1, double y1, double x2, double y2, //
 }
  void QOpenGLPlotWidget::drawAxes()
  {
+     float offsetX = 10;
+     float offsetY = 10;
+     float w = this->width();
+     float h = this->height();
+     float line_vertex[]=
+     {
+         offsetX, offsetY,
+         w-offsetX, offsetY,
+         offsetX, offsetY+1,
+         w-offsetX, offsetY+1,
 
+         w-offsetX, offsetY,
+         w-offsetX+1, offsetY,
+         w-offsetX, h-offsetY,
+         w-offsetX+1, h-offsetY,
+
+         offsetX, h-offsetY,
+         w-offsetX, h-offsetY,
+         offsetX, h-offsetY+1,
+         w-offsetX, h-offsetY+1,
+
+         offsetX, h-offsetY,
+         offsetX+1, h-offsetY,
+         offsetX, offsetY,
+         offsetX+1, offsetY,
+
+     };
+     float line_color[]=
+     {
+         1,1,1,
+         1,1,1,
+         1,1,1,
+         1,1,1,
+
+         1,1,1,
+         1,1,1,
+         1,1,1,
+         1,1,1,
+
+         1,1,1,
+         1,1,1,
+         1,1,1,
+         1,1,1,
+
+         1,1,1,
+         1,1,1,
+         1,1,1,
+         1,1,1,
+     };
+     glColorPointer(3, GL_FLOAT, 0, line_color);
+     glVertexPointer(2, GL_FLOAT, 0, line_vertex);
+//     glColor3f(this->axisColor.redF(), this->axisColor.greenF(), this->axisColor.blueF());
+//     glColor3f(1,1,1);
+     glDrawArrays(GL_TRIANGLE_STRIP, 0, 16);
  }
 
- void QOpenGLPlotWidget::setAxisColor(glColor3f bkgColor)
+ void QOpenGLPlotWidget::setAxisColor(QColor bkgColor)
  {
      this->backgroundColor = bkgColor;
  }
 
- glColor3f QOpenGLPlotWidget::getAxisColor()
+ QColor QOpenGLPlotWidget::getAxisColor()
  {
      return this->backgroundColor;
  }
